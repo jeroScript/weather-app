@@ -43,14 +43,17 @@ const CityList = ({cities, onClickCity}) => {
     return (
         <List>
             {
-                cities.map( city => funcAux(city))
+                cities.map( cityAndCountry => funcAux(cityAndCountry))
             }
         </List>
     )
 }
 
 CityList.propTypes = {
-    cities: PropTypes.array.isRequired,
+    cities: PropTypes.arrayOf(PropTypes.shape({
+        city: PropTypes.string.isRequired,
+        country: PropTypes.string.isRequired,
+    })).isRequired,
     onClickcity: PropTypes.func.isRequired,
 }
 

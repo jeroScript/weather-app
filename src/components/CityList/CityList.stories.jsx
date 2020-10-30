@@ -13,4 +13,4 @@ const cities = [
     {city:'montevideo',country: 'Uruguay'}
 ]
 
-export const CityListExample = () => (<CityList cities={cities}/>)
+export const CityListExample = () => (<CityList cities={cities} onClickCity={action("click en city")}/>)
