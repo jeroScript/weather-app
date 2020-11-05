@@ -1,15 +1,19 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
+import WelcomeComponent from '../components/WelcomeScreen'
+import Grid from '@material-ui/core/Grid'
 
 const WelcomePage = props => {
     return (
-        <div>
-             Welcome
-            <div>
-                <Link to="/main"> Ir a Main </Link>
-            </div>
-        </div>
+        <WelcomeComponent>
+            <Grid container
+                direction="column"
+                className="full"
+                justify="center">
+                    <div className="highlight">
+
+                    </div>
+            </Grid>
+        </WelcomeComponent>
     )
 }
 
