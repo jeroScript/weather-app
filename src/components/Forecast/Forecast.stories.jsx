@@ -10,25 +10,25 @@ const listForecastItem = [
     {
         weekDay: "Domingo",
         hour: 21,
-        state: 'fog',
+        state: 'snow',
         temperature: 23
     },
     {
         weekDay: "Maretes",
         hour: 22,
-        state: 'cloudy',
+        state: 'clouds',
         temperature: 21
     },
     {
         weekDay: "lunes",
         hour: 21,
-        state: 'cloud',
+        state: 'clouds',
         temperature: 23
     },
     {
         weekDay: "viernes",
         hour: 21,
-        state: 'fog',
+        state: 'clear',
         temperature: 2
     }
 ]

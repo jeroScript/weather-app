@@ -4,7 +4,7 @@ import Weather from './Weather'
 
 test('Weather render', async () => {
 
-    const {findByRole} = render(<Weather temperature={10} state={"sunny"}/>);
+    const {findByRole} = render(<Weather temperature={10} state={"clear"}/>);
 
     const temp = await findByRole("heading");
     
