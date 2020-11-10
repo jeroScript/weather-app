@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types';
-import axios from 'axios'
-import convertUnits from 'convert-units'
+import useCityList from '../../hooks/useCityList'
 import Alert from '@material-ui/lab/Alert'
 import Grid from '@material-ui/core/Grid'
 import CityInfo from '../CityInfo';
 import Weather from '../Weather';
 import { List, ListItem } from '@material-ui/core';
+import { getCityCode } from './../../utils/utils'
 
-
-const getCityCode = (city, countryCode) => (`${city}-${countryCode}`)
 
 const renderCityAndCountry = (eventOnClickCity) => {
     const renderCityAndCountryInternal = (cityAndCountry, weather) => {
@@ -44,45 +42,11 @@ const renderCityAndCountry = (eventOnClickCity) => {
     return renderCityAndCountryInternal
 }
 
+
+
 const CityList = ({cities, onClickCity}) => {
 
-    const [allWeather, setallWeather] = useState({})
-    const [error, setError] = useState(null)
-
-    useEffect(() => {
-        const setWeather = async (city, countryCode) => {
-            const apiKey = '4e2de8681516bdf3ecf7ff69162b4a3d';
-            const url = `http://api.openweathermap.org/data/2.5/weather?q=${city},${countryCode}&appid=${apiKey}`;
-            try {
-                const response = await axios.get(url)
-                const {data} = response
-                const temperature = Number(convertUnits(data.main.temp).from('K').to("C").toFixed(0))
-                const state = data.weather[0].main.toLowerCase()
-
-                const propName = getCityCode(city,countryCode); // Ej: [Mendoza-Argentina]
-                const propValue = { temperature, state} // Ej: { temperature: 10, state: "sunny" }
-    
-                setallWeather(allWeather => ( { ...allWeather, [propName]:propValue } ))
-            } catch (error) {
-                if (error.response) { // error q nos responde el server
-                    const {data, status} = error.response
-                    console.log("setWeather -> data", data)
-                    console.log("setWeather -> status", status)
-                    setError('Ha ocurrido un error en el servidor del clima')
-                } else if (error.request ) {
-                    console.log('Server in-accesible o no tengo internet')
-                    setError('Verifique la conexion a internet')
-                } else {
-                    console.log('Error imprevisto')
-                    setError('Error al cargar los datos')
-                }
-            }
-        }
-        cities.forEach( ({city, countryCode}) => {
-            setWeather(city, countryCode)
-        });
-    }, [cities])
-
+    const { allWeather, error, setError } = useCityList(cities)
     // const weather = {temperature: 10, state: 'sunny'}
     const funcAux = renderCityAndCountry(onClickCity)
 
