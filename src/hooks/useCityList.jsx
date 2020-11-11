@@ -4,9 +4,9 @@ import { getWeatherUrl } from '../utils/urls'
 import getAllWeather from '../utils/transform/getAllWeather'
 
 
-const useCityList = (cities) => {
+const useCityList = (cities, onSetAllWeather) => {
 
-    const [allWeather, setallWeather] = useState({})
+    // const [allWeather, setallWeather] = useState({})
     const [error, setError] = useState(null)
 
     useEffect(() => {
@@ -16,7 +16,8 @@ const useCityList = (cities) => {
                 const response = await axios.get(url)
                 const allWeatherAux = getAllWeather(response, city, countryCode)
 
-                setallWeather(allWeather => ({ ...allWeather, ...allWeatherAux }))
+                // setallWeather(allWeather => ({ ...allWeather, ...allWeatherAux }))
+                onSetAllWeather(allWeatherAux)
             } catch (error) {
                 if (error.response) { // error q nos responde el server
                     const {data, status} = error.response
@@ -35,9 +36,9 @@ const useCityList = (cities) => {
         cities.forEach( ({city, countryCode}) => {
             setWeather(city, countryCode)
         });
-    }, [cities])
+    }, [cities, onSetAllWeather])
 
-    return {allWeather, error, setError}
+    return { error, setError}
 
 }
 
