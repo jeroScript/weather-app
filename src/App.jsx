@@ -1,4 +1,4 @@
-import React, {useState, useMemo} from 'react'
+import React, {useState, useCallback, useMemo} from 'react'
 import { BrowserRouter as Router,
     Switch, 
     Route } from 'react-router-dom'
@@ -9,15 +9,40 @@ import WelcomePage from './pages/WelcomePage'
 
 const App = () => {
     const [allWeather, setallWeather] = useState({})
+    const [allChartData, setAllChartData] = useState({})
+    const [allForecastItemList, setAllForecastItemList] = useState({})
 
+    const onSetChartData = useCallback( (chartDataCity) => (
+        setAllChartData( chartData => ({...chartData, ...chartDataCity}))
+    ), [setAllChartData])
 
+    const onSetForecastItemList = useCallback ( (forecastItemListCity) => (
+        setAllForecastItemList( forecastItemList => ({...forecastItemList, ...forecastItemListCity}))
+    ), [setAllForecastItemList])
 
-    const onSetAllWeather = useMemo( () => ((weatherCity) => {
+    const onSetAllWeather = useCallback((weatherCity) => {
         setallWeather( allWeather => {
             return ( {...allWeather, ...weatherCity} )
         })
-    }), [setallWeather])
+    }, [setallWeather])
 
+
+    const actions = useMemo( () => (
+        {
+            onSetAllWeather,
+            onSetChartData, 
+            onSetForecastItemList
+        }
+    ), [onSetAllWeather, onSetChartData, onSetForecastItemList])
+
+    const data  = useMemo(() => (
+        {
+            allWeather,
+            allChartData,
+            allForecastItemList
+        }
+    ), [allWeather, allChartData, allForecastItemList]
+    )
     return (
         <Router>
             <Switch>
@@ -25,10 +50,10 @@ const App = () => {
                 <WelcomePage/>
                 </Route>
                 <Route path="/main">
-                    <MainPage allWeather={allWeather} onSetAllWeather={onSetAllWeather}/>
+                    <MainPage data={data} actions={actions}/>
                 </Route>
                 <Route path="/city/:countryCode/:city">
-                    <CityPage allWeather={allWeather} onSetAllWeather={onSetAllWeather}/>
+                    <CityPage data={data} actions={actions}/>
                 </Route>
                 <Route >
                     <NotFoundPage/>
