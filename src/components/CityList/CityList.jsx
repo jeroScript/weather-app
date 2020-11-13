@@ -9,35 +9,40 @@ import { List, ListItem } from '@material-ui/core';
 import { getCityCode } from './../../utils/utils'
 
 
+const CityListItem = React.memo(({city, countryCode, country, weather, eventOnClickCity}) => {
+    return (
+        <ListItem 
+            button 
+            onClick={() => eventOnClickCity(city, countryCode)}>
+            <Grid container
+                justify="center"
+                alignItems="center"
+            >
+                <Grid item
+                    md={8}
+                    xs={12}
+                >
+                    <CityInfo city={city} country={country}/>
+                </Grid>
+                <Grid item
+                    md={3}
+                    xs={12} >
+                    <Weather 
+                        temperature={weather && weather.temperature} 
+                        state={weather && weather.state}/>
+                </Grid>
+            </Grid>
+        </ListItem> 
+    )
+})
+
+
+
 const renderCityAndCountry = (eventOnClickCity) => {
     const renderCityAndCountryInternal = (cityAndCountry, weather) => {
-        const {city, countryCode, country} = cityAndCountry;
-        return (
-            <ListItem 
-                button 
-                key={getCityCode(city,countryCode)} 
-                onClick={() => eventOnClickCity(city, countryCode)}>
-                <Grid container
-                    justify="center"
-                    alignItems="center"
-                >
-                    <Grid item
-                        md={8}
-                        xs={12}
-                    >
-                        <CityInfo city={city} country={country}/>
-                    </Grid>
-                    <Grid item
-                        md={3}
-                        xs={12} >
-                        <Weather 
-                            temperature={weather && weather.temperature} 
-                            state={weather && weather.state}/>
-                    </Grid>
-                </Grid>
-
-            </ListItem> 
-        )
+        const {city, countryCode} = cityAndCountry; 
+        
+        return <CityListItem key={getCityCode(city,countryCode)}  {...cityAndCountry} eventOnClickCity={eventOnClickCity} weather={weather}  />
     }
     return renderCityAndCountryInternal
 }
@@ -46,7 +51,7 @@ const renderCityAndCountry = (eventOnClickCity) => {
 
 const CityList = ({cities, onClickCity, data, actions}) => {
     const { allWeather } = data ;
-    const { error, setError } = useCityList(cities, allWeather, actions.onSetAllWeather)
+    const { error, setError } = useCityList(cities, allWeather, actions)
     // const weather = {temperature: 10, state: 'sunny'}
     const funcAux = renderCityAndCountry(onClickCity)
 
@@ -77,7 +82,7 @@ CityList.propTypes = {
     onClickcity: PropTypes.func.isRequired,
 }
 
-export default CityList
+export default React.memo(CityList)
 
 
 

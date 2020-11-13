@@ -15,12 +15,12 @@ import { getCountryNameByCountryCode } from '../utils/serviceCities'
 
 const CityPage = ({data, actions}) => {
     const { allWeather, allChartData, allForecastItemList } = data // tambien se puede hacer con data.allWeather
-    const { onSetAllWeather, onSetChartData, onSetForecastItemList} = actions
-    const {city, countryCode} = useCityPage(allChartData, allForecastItemList, onSetChartData, onSetForecastItemList)
+    // const { onSetAllWeather, onSetChartData, onSetForecastItemList} = actions
+    const {city, countryCode} = useCityPage(allChartData, allForecastItemList, actions)
     
     const cities = React.useMemo( () => ([{city, countryCode}]), [city, countryCode])
 
-    useCityList(cities, allWeather, onSetAllWeather)
+    useCityList(cities, allWeather, actions)
 
     const cityCode = getCityCode(city, countryCode)
 

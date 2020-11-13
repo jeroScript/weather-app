@@ -5,7 +5,7 @@ import getAllWeather from '../utils/transform/getAllWeather'
 import { getCityCode } from '../utils/utils'
 
 
-const useCityList = (cities, allWeather, onSetAllWeather) => {
+const useCityList = (cities, allWeather, actions) => {
 
     // const [allWeather, setallWeather] = useState({})
     const [error, setError] = useState(null)
@@ -15,13 +15,15 @@ const useCityList = (cities, allWeather, onSetAllWeather) => {
             const url = getWeatherUrl({city,countryCode});
             try {
                 const propName = getCityCode(city,countryCode)
-                onSetAllWeather({[propName]: {}})
-
+                // onSetAllWeather({[propName]: {}})
+                actions({ type: 'SET_ALL_WEATHER', payload: {[propName]: {}} })
                 const response = await axios.get(url)
                 const allWeatherAux = getAllWeather(response, city, countryCode)
 
                 // setallWeather(allWeather => ({ ...allWeather, ...allWeatherAux }))
-                onSetAllWeather(allWeatherAux)
+                // onSetAllWeather(allWeatherAux)
+                actions({ type: 'SET_ALL_WEATHER', payload: allWeatherAux })
+
             } catch (error) {
                 if (error.response) { // error q nos responde el server
                     const {data, status} = error.response
@@ -42,7 +44,7 @@ const useCityList = (cities, allWeather, onSetAllWeather) => {
                 setWeather(city, countryCode)
             }
         });
-    }, [cities, allWeather, onSetAllWeather])
+    }, [cities, actions, allWeather])
 
     return { error, setError}
 
