@@ -7,9 +7,10 @@ import CityInfo from '../CityInfo';
 import Weather from '../Weather';
 import { List, ListItem } from '@material-ui/core';
 import { getCityCode } from './../../utils/utils'
+import { useWeatherDispatchContext, useWeatherStateContext } from '../../WeatherContext';
 
 
-const CityListItem = React.memo(({city, countryCode, country, weather, eventOnClickCity}) => {
+const CityListItem = React.memo(function CityListItem({city, countryCode, country, weather, eventOnClickCity})  {
     return (
         <ListItem 
             button 
@@ -42,14 +43,21 @@ const renderCityAndCountry = (eventOnClickCity) => {
     const renderCityAndCountryInternal = (cityAndCountry, weather) => {
         const {city, countryCode} = cityAndCountry; 
         
-        return <CityListItem key={getCityCode(city,countryCode)}  {...cityAndCountry} eventOnClickCity={eventOnClickCity} weather={weather}  />
+        return (<CityListItem key={getCityCode(city,countryCode)}  
+                {...cityAndCountry} 
+                eventOnClickCity={eventOnClickCity} 
+                weather={weather}  />
+        )
     }
     return renderCityAndCountryInternal
 }
 
 
 
-const CityList = ({cities, onClickCity, data, actions}) => {
+const CityList = ({cities, onClickCity}) => {
+    const actions = useWeatherDispatchContext()
+    const data = useWeatherStateContext()
+    
     const { allWeather } = data ;
     const { error, setError } = useCityList(cities, allWeather, actions)
     // const weather = {temperature: 10, state: 'sunny'}
